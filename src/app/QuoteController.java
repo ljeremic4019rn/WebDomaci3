@@ -1,11 +1,10 @@
 package app;
 
 import http.Quote;
-import http.Request;
 import http.response.HtmlResponse;
 import http.response.RedirectResponse;
 import http.response.Response;
-import http.serverMain.HttpRequest;
+import http.serverMain.Request;
 import http.serverMain.Server;
 
 import java.io.*;
@@ -16,11 +15,11 @@ public class QuoteController extends Controller {
 
     PrintWriter out = null;
     BufferedReader in = null;
-    String qotd = "";
+    String qod = "";
     String listElements = "";
 
 
-    public QuoteController(Request request) {
+    public QuoteController(http.Request request) {
         super(request);
     }
 
@@ -35,36 +34,32 @@ public class QuoteController extends Controller {
             Socket socket = new Socket("localhost", 8114);
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        HttpRequest httpRequest = new HttpRequest("");
-        out.println(httpRequest.getRequestString());
 
 
+            Request request = new Request("");//saljemo request za qod
+            out.println(request.getRequestString());
 
-        try {
+
             String requestLine = in.readLine();
-            int cLength = 0;
+            int contentLength = 0;
             do {
-                if(requestLine.contains("Content-Length")) cLength = Integer.parseInt(requestLine.split(":")[1].trim());
+                if(requestLine.contains("Content-Length")) {
+                    contentLength = Integer.parseInt(requestLine.split(":")[1].trim());//parsiramo qod
+                }
                 requestLine = in.readLine();
             } while (!requestLine.trim().equals(""));
 
-            char[] buffer = new char[cLength];
+            char[] buffer = new char[contentLength];
             in.read(buffer);
 
-            String a = new String(buffer);
-            a = a.replace("{", "");
-            a = a.replace("}", "");
-            String author = a.split(",")[0].split(":")[1];
-            String quote = a.split(",")[1].split(":")[1];
+            String quoteRaw = new String(buffer);
+            String [] split = quoteRaw.split("-");
+            qod = split[0] + " - " + split[1];
 
-            qotd = quote + " - " + author;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
 
         String htmlBody = "" +
@@ -74,7 +69,7 @@ public class QuoteController extends Controller {
                 "<button>Submit</button>" +
                 "</form>" +
                 "<p> Quote of the day: <p>" +
-//                "<p>" + qotd + "<p>" +
+                "<p>" + qod + "<p>" +
                 "<p> saved quotes: </p>" +
                 "<ul>" + listElements + "</ul>";
 

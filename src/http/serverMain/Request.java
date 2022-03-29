@@ -1,10 +1,10 @@
 package http.serverMain;
 
-public class HttpRequest  {
+public class Request {
 
     private final String http;
 
-    public HttpRequest(String http) {
+    public Request(String http) {
         this.http = http;
     }
 

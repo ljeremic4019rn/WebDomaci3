@@ -7,8 +7,6 @@ import http.serverMain.Server;
 
 public class RequestHandler {
     public Response handle(Request request) throws Exception {
-        System.err.println("main handler");
-        System.err.println(request.getPath());
         if (request.getPath().equals("/quote") && request.getHttpMethod().equals(HttpMethod.GET)) {
             return (new QuoteController(request)).doGet();
         } else if (request.getPath().equals("/save-quote") && request.getHttpMethod().equals(HttpMethod.POST)) {

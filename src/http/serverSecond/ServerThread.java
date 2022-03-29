@@ -1,6 +1,7 @@
 package http.serverSecond;
 
 import app.RequestHandler;
+import appSecond.RequestHandlerS;
 import http.HttpMethod;
 import http.Request;
 import http.response.Response;
@@ -51,7 +52,7 @@ public class ServerThread implements Runnable {
 
             Request request = new Request(HttpMethod.valueOf(method), path);
 
-            RequestHandler requestHandler = new RequestHandler();
+            RequestHandlerS requestHandler = new RequestHandlerS();
             Response response = requestHandler.handle(request);
 
             System.out.println("\nHTTP odgovor:\n");

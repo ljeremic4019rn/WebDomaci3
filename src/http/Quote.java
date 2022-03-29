@@ -29,4 +29,8 @@ public class Quote {
     public String toString() {
         return author + "-" + quote;
     }
+
+    public String jsonString() {
+        return "{\"author\":"+this.author+",\"quote\":"+this.quote+"}";
+    }
 }

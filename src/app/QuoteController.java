@@ -1,5 +1,6 @@
 package app;
 
+import com.google.gson.Gson;
 import http.Quote;
 import http.response.HtmlResponse;
 import http.response.RedirectResponse;
@@ -36,7 +37,7 @@ public class QuoteController extends Controller {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 
-            Request request = new Request("");//saljemo request za qod
+            Request request = new Request();//saljemo request za qod
             out.println(request.getRequestString());
 
 
@@ -52,15 +53,23 @@ public class QuoteController extends Controller {
             char[] buffer = new char[contentLength];
             in.read(buffer);
 
-            String quoteRaw = new String(buffer);
-            String [] split = quoteRaw.split("-");
-            qod = split[0] + " - " + split[1];
 
+            String quoteRaw = new String(buffer);
+            System.out.println("raw");
+            System.out.println(quoteRaw); //"{\"author\":Thermite,\"quote\":A really big fucking hole coming right up!}"
+
+            quoteRaw = quoteRaw.replace("{", "");
+            quoteRaw = quoteRaw.replace("}", "");
+
+
+            String []tmp = quoteRaw.split(",");
+            String []author = tmp[0].split(":");
+            String []quote = tmp[1].split(":");
+
+            qod = author[1]  + " - " + quote[1].replace("\"","");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
 
         String htmlBody = "" +
                 "<form method=\"POST\" action=\"/save-quote\">" +
@@ -81,7 +90,7 @@ public class QuoteController extends Controller {
 
     @Override
     public Response doPost() {
-        System.out.println("sacuvan quote");
+//        System.out.println("sacuvan quote");
         return new RedirectResponse("/quote");
     }
 }

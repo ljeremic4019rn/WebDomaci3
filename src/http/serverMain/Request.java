@@ -2,10 +2,7 @@ package http.serverMain;
 
 public class Request {
 
-    private final String http;
-
-    public Request(String http) {
-        this.http = http;
+    public Request() {
     }
 
     public String getRequestString() {
@@ -24,7 +21,6 @@ public class Request {
                         "Accept-Encoding: gzip, deflate, br\r\n" +
                         "Accept-Language: en-US,en;q=0.9,sr-RS;q=0.8,sr;q=0.7,hr;q=0.6,tr;q=0.5\r\n" +
                         "Referer: http://localhost:8113/quote\r\n\r\n";
-        response += http;
 
         return response;
     }

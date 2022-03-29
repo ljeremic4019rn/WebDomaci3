@@ -1,5 +1,6 @@
 package appSecond;
 
+import com.google.gson.Gson;
 import http.Quote;
 import http.Request;
 import http.response.Response;
@@ -15,8 +16,10 @@ public class QodController extends Controller {
 
     @Override
     public Response doGet() {
-        Quote qotd = ServerS.getQod();
-        return new HtmlResponseBack(qotd.toString());
+        Quote qod = ServerS.getQod();
+        Gson gson = new Gson();
+        String json = gson.toJson(qod.jsonString());
+        return new HtmlResponseBack(json);
     }
 
     @Override
